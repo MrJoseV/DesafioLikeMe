@@ -37,14 +37,12 @@ app.put("/posts/:id/like", async (req, res) => {
 
 
     const { id } = req.params;
-    console.log("🛰️ Backend recibió PUT para ID:", id)
     const query = `
       UPDATE posts
       SET likes = likes + 1
       WHERE id = $1
       RETURNING *`;
 
-    // 👇 Esto debería mostrarse en la consola
     console.log("Query:", query);
 
     const result = await pool.query(query, [id]);
