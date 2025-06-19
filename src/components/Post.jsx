@@ -16,7 +16,7 @@ function Post({
           <div className="d-flex justify-content-between align-items-center">
             <div>
               <i
-                onClick={() => like(id)}
+                onClick={() => like(id) }
                 className={`fa-heart fa-xl ${
                   likes ? "fa-solid" : "fa-regular"
                 }`}
