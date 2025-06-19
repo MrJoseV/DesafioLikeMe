@@ -8,8 +8,6 @@ app.use(cors({
     origin: "http://localhost:5173", // Cambia por el puerto donde corre React
     methods: ["GET", "POST","PUT","DELETE"]
 }));
-console.log("✅ Backend inicializado correctamente");
-
 app.get("/posts", async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM posts"); 
@@ -34,42 +32,30 @@ app.post("/posts", async (req, res) => {
 });
 
 app.put("/posts/:id/like", async (req, res) => {
-
-
     const { id } = req.params;
     const query = `
       UPDATE posts
       SET likes = likes + 1
       WHERE id = $1
       RETURNING *`;
-
-    console.log("Query:", query);
-
     const result = await pool.query(query, [id]);
-
     res.json(result.rows[0]);
-
 });
 
 app.delete("/posts/:id", async (req, res) => {
     try {
         const { id } = req.params;
-
         const query = "DELETE FROM posts WHERE id = $1 RETURNING *";
         const result = await pool.query(query, [id]);
-
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Post no encontrado" });
         }
-
         res.json({ message: "Post eliminado correctamente" });
     } catch (error) {
         console.error("Error al eliminar post:", error);
         res.status(500).json({ error: "Error al eliminar el post" });
     }
 });
-
-
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, console.log('Estamos ready  http://localhost:',{PORT}))
